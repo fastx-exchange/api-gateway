@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres_db:
+    image: postgres
+    container_name: postgres_container
+    restart: always
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=fastx123
+      - POSTGRES_DB=fastx
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+volumes:
+  postgres_db:
+    driver: local
