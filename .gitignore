@@ -2,3 +2,4 @@
 .idea
 cmd/build-errors.log
 cmd/app/main
+go.sum
