@@ -3,7 +3,6 @@ package user
 import (
 	"fastx-api/src/services"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -11,8 +10,8 @@ type UserController struct {
 	userService *services.UserService
 }
 
-func NewUserController(db *gorm.DB) *UserController {
-	userService := services.NewUserService(db)
+func NewUserController() *UserController {
+	userService := services.NewUserService()
 	return &UserController{userService: userService}
 }
 

@@ -1,3 +1,4 @@
 .env
 .idea
 cmd/build-errors.log
+cmd/app/main

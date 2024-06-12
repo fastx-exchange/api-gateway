@@ -3,11 +3,10 @@ package routes
 import (
 	"fastx-api/src/controllers/user"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func InitializeUserRoutes(r *gin.Engine, db *gorm.DB) {
-	userController := user.NewUserController(db)
+func InitializeUserRoutes(r *gin.Engine) {
+	userController := user.NewUserController()
 
 	v1 := r.Group("/api/v1")
 	{

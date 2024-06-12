@@ -1,20 +1,21 @@
 package services
 
-import (
-	"fastx-api/src/models"
-	"fastx-api/src/repositories"
-	"gorm.io/gorm"
-)
-
-type UserService struct {
-	repo *repositories.UserRepository
+type User struct {
+	ID    int
+	Name  string
+	Email string
 }
 
-func NewUserService(db *gorm.DB) *UserService {
-	userRepo := repositories.NewUserRepository(db)
-	return &UserService{repo: userRepo}
+type UserService struct{}
+
+func NewUserService() *UserService {
+	return &UserService{}
 }
 
-func (s *UserService) GetAllUsers() ([]models.User, error) {
-	return s.repo.GetAll()
+func (s *UserService) GetAllUsers() ([]User, error) {
+	users := []User{
+		{ID: 1, Name: "John Doe", Email: "john.doe@example.com"},
+		{ID: 2, Name: "Jane Doe", Email: "jane.doe@example.com"},
+	}
+	return users, nil
 }
