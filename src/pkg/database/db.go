@@ -1,7 +1,7 @@
 package database
 
 import (
-	"fastx-api/config"
+	"api-gateway/config"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

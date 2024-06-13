@@ -1,29 +1,49 @@
 package main
 
 import (
-	"fastx-api/config"
-	"fastx-api/src/routes"
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
+
+	pb "api-gateway/pb"
+	"api-gateway/src/routes"
+	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	// Load configuration
-	config.LoadConfig()
-
 	// Set up Gin router
 	r := gin.Default()
 
-	// Initialize routes
-	routes.InitializeRoutes(r)
+	// Fetch HTTP port from environment variable or use default
+	httpPort := os.Getenv("HTTP_PORT")
+	if httpPort == "" {
+		httpPort = "8080" // Default HTTP port
+	}
 
-	// Run the server
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	// Run the HTTP server
+	go func() {
+		if err := r.Run(":" + httpPort); err != nil {
+			log.Fatalf("Failed to run HTTP server: %v", err)
+		}
+	}()
+
+	// Fetch gRPC host and port from environment variables or use defaults
+	grpcAddr := os.Getenv("GRPC_ORDER_SERVICE")
+	if grpcAddr == "" {
+		grpcAddr = "localhost:50052" // Default gRPC address
 	}
-	if err := r.Run(":" + port); err != nil {
-		log.Fatalf("Failed to run server: %v", err)
+
+	// Connect to Oder Service via gRPC
+	userConn, err := grpc.Dial(grpcAddr, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to connect to user service at %s: %v", grpcAddr, err)
 	}
+	defer userConn.Close()
+	userServiceClient := pb.NewUserServiceClient(userConn)
+
+	// Initialize routes and pass the gRPC client
+	routes.InitializeRoutes(r, userServiceClient)
+
+	// Wait indefinitely
+	select {}
 }

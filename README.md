@@ -23,12 +23,16 @@ $ npm install -g dotenv-cli
 
 - copy .env file from .env.example and then change database configuration
 ```sh
-$ cp .env.example .env
+$ cp ..env.example .env
 ```
 
 ### Install app
 ```sh
 $ go mod tidy
+```
+- Gen from .proto file (example user.proto)
+```sh
+$  protoc --go_out=pb --go-grpc_out=pb proto/user.proto
 ```
 - Create Migration file from Model
 ```sh
